@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>My Notes App</h1>
+      <h1 className="display-3 text-center">My Notes App</h1>
       <Notes />
     </div>
   );

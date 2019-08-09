@@ -1,5 +1,7 @@
+.card.myclass{
+    margin-top: 20px;
+}
 .card.myclass:hover{
     background-color: lightgray;
-    margin: auto;
     cursor: pointer;
 }
