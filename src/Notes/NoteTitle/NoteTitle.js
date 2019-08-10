@@ -1,4 +1,6 @@
+/* eslint-disable react/no-typos */
 import React from "react";
+import PropTypes from 'prop-types';
 
 const noteTitle = (props) => {
     // console.log(props);
@@ -12,10 +14,15 @@ const noteTitle = (props) => {
       <div className="card myclass" onClick={() => handleClick()}>
         <div className="card-header">
           <h3>{props.title.toUpperCase()}</h3>
+          {/* <h3>Title</h3> */}
         </div>
       </div>
     </div>
   );
 };
 
+noteTitle.propTypes = {
+  title : PropTypes.string.isRequired,
+  onClickHandler : PropTypes.func
+}
 export default noteTitle;
