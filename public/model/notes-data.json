@@ -1,0 +1,8 @@
+{
+  "notesdata": [
+    { "id": 1, "title": "grocery", "body": "buy the pulses" },
+    { "id": 2, "title": "domestic", "body": "renew insurance" },
+    { "id": 3, "title": "study", "body": "read the books" },
+    { "id": 4, "title": "planting", "body": "pot the plants" }
+  ]
+}

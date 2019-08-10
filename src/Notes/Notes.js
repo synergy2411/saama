@@ -1,24 +1,22 @@
 import React from "react";
+import axios from 'axios';
+
 import NoteTitle from "./NoteTitle/NoteTitle";
 import NoteBody from "./NoteBody/NoteBody";
-import EditNote from './EditNote/EditNote';
+import EditNote from "./EditNote/EditNote";
 
 import "./notes.css";
 
 class Notes extends React.Component {
+
   constructor(props) {
     super(props);
-    console.log("[Constructor]")
+    console.log("[Constructor]");
     this.state = {
       showBody: false,
       selectedId: null,
-      editNoteId : null,
-      notes: [
-        { id: 1, title: "grocery", body: "buy the pulses" },
-        { id: 2, title: "domestic", body: "renew insurance" },
-        { id: 3, title: "study", body: "read the books" },
-        { id: 4, title: "planting", body: "pot the plants" }
-      ]
+      editNoteId: null,
+      notes: []
     };
   }
 
@@ -31,15 +29,20 @@ class Notes extends React.Component {
     });
   };
 
-  componentDidMount(){
-    console.log("[Component Did Mount]")
+  componentDidMount() {
+    console.log("[Component Did Mount]");
+    axios.get("https://monocept-proj.firebaseio.com/notesdata.json")
+      .then(response => {
+        this.setState({notes : response.data})
+      }).catch(err => console.log(err))
   }
-  shouldComponentUpdate(nextProps, nextState){
+
+  shouldComponentUpdate(nextProps, nextState) {
     console.log("[Should Component Update]");
     return true;
   }
-  componentWillUnmount(){
-    console.log("[Component Will Unmount]")
+  componentWillUnmount() {
+    console.log("[Component Will Unmount]");
   }
 
   deleteHandler = id => {
@@ -47,41 +50,78 @@ class Notes extends React.Component {
     const position = duplicateNotes.findIndex(note => note.id === id);
     duplicateNotes.splice(position, 1);
     this.setState({
-      notes : duplicateNotes,
-      showBody : false,
-      selectedId : null
-    })
-  }
+      notes: duplicateNotes,
+      showBody: false,
+      selectedId: null,
+      editNoteId: null
+    });
+  };
 
   editHandler = id => {
     this.setState({
-      editNoteId : id 
+      editNoteId: id,
+      showBody: false,
+      selectedId: null
+    });
+  };
+
+  changeHandler = (event) => {
+    console.log(event.target.value);
+    const duplicateNotes = [...this.state.notes];
+    const position = duplicateNotes.findIndex(note =>note.id === this.state.editNoteId );
+    // const note = duplicateNotes.find(note => note.id === this.state.editNoteId);
+    // duplicateNotes.splice(position, 1);
+    // note.body = event.target.value;
+    // duplicateNotes.push(note);
+    duplicateNotes[position].body = event.target.value;
+    this.setState({
+      notes : duplicateNotes
     })
   }
 
+  saveHandler = () => {
+    this.setState({
+      editNoteId : null
+    })
+  }
 
   render() {
-    console.log("[Render]")
+    console.log("[Render]");
     let body = null;
     let editBody = null;
-    if(this.state.editNoteId !== null){
-      editBody = <EditNote />
+
+    // EDIT THE NOTE
+    if (this.state.editNoteId !== null) {
+      const duplicateNotes = [...this.state.notes];
+      const note = duplicateNotes.find(note => {
+        return note.id === this.state.editNoteId;
+      });
+      editBody = (
+        <EditNote
+          note={note}
+          onChangeHandler={event => this.changeHandler(event)}
+          onSaveHandler = {this.saveHandler}
+        />
+      );
     }
 
+    // SHOW THE NOTE BODY
     if (this.state.showBody && this.state.selectedId !== null) {
       const duplicateNotes = [...this.state.notes];
       const note = duplicateNotes.find(note => {
         return note.id === this.state.selectedId;
       });
-      body = <NoteBody 
-                note={note} 
-                onDeleteHandler = {(id) => this.deleteHandler(id)}
-                onEditHandler = {(id) => this.editHandler(id)}
-                />;
+      body = (
+        <NoteBody
+          note={note}
+          onDeleteHandler={id => this.deleteHandler(id)}
+          onEditHandler={id => this.editHandler(id)}
+        />
+      );
     }
     let notes = this.state.notes.map(note => (
       <NoteTitle
-      title = {note.title}
+        title={note.title}
         key={note.id}
         id={note.id}
         onClickHandler={() => this.clickHandler(note.id)}
@@ -95,9 +135,7 @@ class Notes extends React.Component {
         <div className="row">{body}</div>
         <br />
         <div className="row">
-          <div className="col-xs-12 col-sm-12 col-md-12">
-          {editBody}
-          </div>
+          <div className="col-xs-12 col-sm-12 col-md-12">{editBody}</div>
         </div>
       </div>
     );
