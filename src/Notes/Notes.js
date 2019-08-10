@@ -1,5 +1,6 @@
 import React from "react";
 import NoteTitle from "./NoteTitle/NoteTitle";
+import NoteBody from './NoteBody/NoteBody';
 
 import "./notes.css";
 
@@ -32,15 +33,7 @@ class Notes extends React.Component {
        const note = duplicateNotes.find(note => {
            return note.id === this.state.selectedId
        });
-       body = (
-        <div className="col-xs-12 col-sm-12 col-md-12">
-          <div className="card">
-            <div className="card-body">
-              <p>{note.body}</p>
-            </div>
-          </div>
-        </div>
-      );
+       body = <NoteBody note = {note}/>
     }
     let notes = this.state.notes.map(note => (  
         <NoteTitle 
@@ -60,3 +53,7 @@ class Notes extends React.Component {
 }
 
 export default Notes;
+
+
+// github.com/synergy2411/saama
+// https://surveymonkey.com/r/28NGCDY
