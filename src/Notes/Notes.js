@@ -54,6 +54,3 @@ class Notes extends React.Component {
 
 export default Notes;
 
-
-// github.com/synergy2411/saama
-// https://surveymonkey.com/r/28NGCDY
