@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Container from './Container/Container';
+import Counter from "./Counter/Counter";
 
 
 
@@ -23,12 +24,17 @@ function App() {
   //   React.createElement("h1", {}, "My Notes App!" ));
 
   return (
-    <BrowserRouter>
-      <div className="container">
-        <h1 className="display-3 text-center">My Notes App</h1>
-        <Container />
-      </div>
-    </BrowserRouter>
+
+    <div className="container">
+      <Counter />
+    </div>
+
+    // <BrowserRouter>
+    //   <div className="container">
+    //     <h1 className="display-3 text-center">My Notes App</h1>
+    //     <Container />
+    //   </div>
+    // </BrowserRouter>
   );
 }
 
