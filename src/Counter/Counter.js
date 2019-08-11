@@ -27,7 +27,7 @@ class Counter extends Component {
 
   render() {
     return (
-      <div className="card text-center">
+      <div className="card text-center" style = {{'marginTop' : '50px'}}>
         <div className="card-header">
           <h2>Counter : {this.state.counter}</h2>
         </div>
