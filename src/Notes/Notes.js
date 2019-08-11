@@ -1,5 +1,5 @@
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
 
 import NoteTitle from "./NoteTitle/NoteTitle";
 import NoteBody from "./NoteBody/NoteBody";
@@ -8,9 +8,9 @@ import EditNote from "./EditNote/EditNote";
 import "./notes.css";
 
 class Notes extends React.Component {
-
   constructor(props) {
     super(props);
+    console.log(props);
     console.log("[Constructor]");
     this.state = {
       showBody: false,
@@ -19,7 +19,6 @@ class Notes extends React.Component {
       notes: []
     };
   }
-
 
   clickHandler = id => {
     // this.state.showBody = true;   - NEVER DO THIS
@@ -31,10 +30,22 @@ class Notes extends React.Component {
 
   componentDidMount() {
     console.log("[Component Did Mount]");
-    axios.get("https://monocept-proj.firebaseio.com/notesdata.json")
+    axios
+      .get("model/notes-data.json")
       .then(response => {
-        this.setState({notes : response.data})
-      }).catch(err => console.log(err))
+        if (this.props.location.state) {
+          const note = {
+            id: new Date(),
+            title: this.props.location.state.title,
+            body: this.props.location.state.body
+          };
+          return [...response.data['notesdata'], note];
+        }
+        return [...response.data['notesdata']]
+      }).then(updatedNote => {
+        this.setState({notes : updatedNote});
+      })
+      .catch(err => console.log(err));
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -65,25 +76,27 @@ class Notes extends React.Component {
     });
   };
 
-  changeHandler = (event) => {
+  changeHandler = event => {
     console.log(event.target.value);
     const duplicateNotes = [...this.state.notes];
-    const position = duplicateNotes.findIndex(note =>note.id === this.state.editNoteId );
+    const position = duplicateNotes.findIndex(
+      note => note.id === this.state.editNoteId
+    );
     // const note = duplicateNotes.find(note => note.id === this.state.editNoteId);
     // duplicateNotes.splice(position, 1);
     // note.body = event.target.value;
     // duplicateNotes.push(note);
     duplicateNotes[position].body = event.target.value;
     this.setState({
-      notes : duplicateNotes
-    })
-  }
+      notes: duplicateNotes
+    });
+  };
 
   saveHandler = () => {
     this.setState({
-      editNoteId : null
-    })
-  }
+      editNoteId: null
+    });
+  };
 
   render() {
     console.log("[Render]");
@@ -100,7 +113,7 @@ class Notes extends React.Component {
         <EditNote
           note={note}
           onChangeHandler={event => this.changeHandler(event)}
-          onSaveHandler = {this.saveHandler}
+          onSaveHandler={this.saveHandler}
         />
       );
     }

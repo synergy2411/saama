@@ -15,9 +15,9 @@ const noteTitle = props => {
       <div className="card myclass" onClick={() => handleClick()}>
         <div className="card-header">
           <h3>{props.title.toUpperCase()}</h3>
-          <MyContext.Consumer>
+          {/* <MyContext.Consumer>
             {value => value.username }
-          </MyContext.Consumer>
+          </MyContext.Consumer> */}
         </div>
       </div>
     </div>
